@@ -6,7 +6,6 @@ export const onCreateExercise = /* GraphQL */ `
     onCreateExercise {
       id
       name
-      description
       repetitions
       sets
       createdAt
@@ -19,7 +18,6 @@ export const onUpdateExercise = /* GraphQL */ `
     onUpdateExercise {
       id
       name
-      description
       repetitions
       sets
       createdAt
@@ -32,7 +30,6 @@ export const onDeleteExercise = /* GraphQL */ `
     onDeleteExercise {
       id
       name
-      description
       repetitions
       sets
       createdAt

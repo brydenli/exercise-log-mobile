@@ -6,7 +6,6 @@ export const getExercise = /* GraphQL */ `
     getExercise(id: $id) {
       id
       name
-      description
       repetitions
       sets
       createdAt
@@ -24,7 +23,6 @@ export const listExercises = /* GraphQL */ `
       items {
         id
         name
-        description
         repetitions
         sets
         createdAt
