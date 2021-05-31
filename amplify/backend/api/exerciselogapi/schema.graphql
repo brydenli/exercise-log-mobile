@@ -1,0 +1,7 @@
+type Exercise @model {
+  id: ID!
+  name: String!
+  description: String
+  repetitions: Int
+  sets: Int
+}
