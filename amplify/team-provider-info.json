@@ -10,11 +10,6 @@
       "StackName": "amplify-exerciselog-dev-120254",
       "StackId": "arn:aws:cloudformation:us-west-2:076016073201:stack/amplify-exerciselog-dev-120254/6e3941f0-c23a-11eb-91b6-0afe8bd78119",
       "AmplifyAppId": "dufmkhy2a23ku"
-    },
-    "categories": {
-      "auth": {
-        "exerciselog2dc46584": {}
-      }
     }
   }
 }

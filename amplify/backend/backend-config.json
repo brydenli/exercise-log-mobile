@@ -1,12 +1,5 @@
 {
-  "auth": {
-    "exerciselog2dc46584": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
-    }
-  },
+  "auth": {},
   "api": {
     "exerciselogapi": {
       "service": "AppSync",
