@@ -1,6 +1,6 @@
 type Exercise @model {
   id: ID!
   name: String!
-  repetitions: Int
-  sets: Int
+  repetitions: String
+  sets: String
 }

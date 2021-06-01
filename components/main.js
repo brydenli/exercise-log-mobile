@@ -1,39 +1,39 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, Button} from 'react-native';
+import {View, Text, TextInput, Button, ScrollView} from 'react-native';
 import {API, graphqlOperation} from 'aws-amplify';
 import {createExercise} from '../src/graphql/mutations'
 import {listExercises} from '../src/graphql/queries'
 
+const initialState = {name: '', repetitions: 0, sets: 0};
+
 const Main = () => {
-    const [name, setName] = useState('');
-    const [repititions, setRepititions] = useState(0)
-    const [sets, setSets] = useState(0)
+    const [formState, setFormState] = useState(initialState)
     const [exercises, setExercises] = useState([]);
 
     const getExercises = async () => {
         try {
             const exercise_data = await API.graphql(graphqlOperation(listExercises));
             const exerciseList = exercise_data.data.listExercises.items;
-            setExercises(exerciseList);    
+            await setExercises(exerciseList);    
+            console.log(exercises)
         }
         catch(err) {
             console.log(err)
         }
     };
 
-    const createNewExercise = async () => {
+    const setInput = (key, value) => {
+        setFormState({...formState, [key]: value});
+    };
+
+    const createNewExercise = (e) => {
+        e.persist();
         try {
-            const newExercise = {
-                name: name,
-                repititions: repititions,
-                sets: sets
-            };
+            const newExercise = {...formState};
             setExercises([...exercises, newExercise]);
-            setName('');
-            setRepititions(0);
-            setSets(0);
-            
-            await API.graphql(graphqlOperation(createExercise, {input: newExercise}));
+            setFormState(initialState);
+            console.log(newExercise)
+            API.graphql(graphqlOperation(createExercise, {input: newExercise}))
         }
         catch(err) {
             console.log(err)
@@ -46,36 +46,40 @@ const Main = () => {
 
     return (
         <View>
+            <ScrollView>
             <Text>Exercise Log</Text>
 
             <TextInput
-                value={name}
-                onChange={(text) => setName(text)}
+                value={formState.name}
+                onChangeText={(text) => setInput('name', text)}
                 placeholder="Name"
             ></TextInput>
 
-           {/* <NumericInput
-                value={repititions}
-                onChangeText={(text) => setRepititions(text)}
+           <TextInput
+                value={formState.repetitions}
+                keyboardType="numeric"
+                onChangeText={(text) => setInput('repetitions', text)}
                 placeholder="Repetitions"
-            ></NumericInput>
+            ></TextInput>
 
-            <NumericInput
-                value={sets}
-                onChange={(text) => setSets(text)}
+            <TextInput
+                value={formState.sets}
+                keyboardType="numeric"
+                onChangeText={(text) => setInput('sets', text)}
                 placeholder="Sets"
-            ></NumericInput>*/}
+            ></TextInput>
 
-            <Button title='Create new Exercise'/>
+            <Button title='Create new Exercise' onPress={(e) => createNewExercise(e)}/>
 
-            {exercises && exercises.map((item, index) => {
+            {exercises.map((item, index) => (
                 <View key={item.id ? item.id : index}>
-                    <Text>{item.name}</Text>
-                    <Text>{item.repititions}</Text>
-                    <Text>{item.sets}</Text>
-                </View>
-            })}
-            
+                    <Text>Name: {item.name}</Text>
+                    <Text>Repetitions: {item.repetitions}</Text>
+                    <Text>Sets: {item.sets}</Text>
+                </View>)
+            )}
+
+            </ScrollView>
         </View>
     )
 }
