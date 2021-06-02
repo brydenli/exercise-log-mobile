@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, Button, ScrollView} from 'react-native';
+import {View, Text, TextInput, Button, ScrollView, Share} from 'react-native';
 import {API, graphqlOperation} from 'aws-amplify';
 import {createExercise, deleteExercise} from '../src/graphql/mutations'
 import {listExercises} from '../src/graphql/queries'
 
 const initialState = {name: '', repetitions: 0, sets: 0};
 
-const Main = () => {
+const Main = ({navigation}) => {
     const [formState, setFormState] = useState(initialState)
     const [exercises, setExercises] = useState([]);
     const [refresh, setRefresh] = useState(false)
@@ -53,6 +53,27 @@ const Main = () => {
         }
     }
 
+    const onShare = async () => {
+        try {
+            let message = "Today's workout: \n";
+            const create_message = () => {
+                    exercises.map((item) => {
+                    message = message + String(item.name) + ': ' + String(item.repetitions) + 'x' + String(item.sets) + '\n'
+                 })
+            }
+
+            create_message();
+
+            Share.share({
+                message: message,
+                title: 'Workout List'
+            })
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
         getExercises();
         setRefresh(false);
@@ -93,6 +114,8 @@ const Main = () => {
                     <Button title='Delete' onPress={(e) => deleteCurrentExercise(e, item.id)}/>
                 </View>)
             )}
+
+            <Button title='Share Workout' onPress={onShare}/>
 
             </ScrollView>
         </View>
